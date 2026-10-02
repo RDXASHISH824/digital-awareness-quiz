@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Responsible Use of Technology — Digital Awareness Quiz</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(145deg,#03121d,#001b2b 55%,#03110e);color:#fff;min-height:100vh}
+.wrap{max-width:900px;margin:auto;padding:24px}
+.card{background:rgba(3,15,25,.88);border:1px solid #19cfff55;border-radius:24px;box-shadow:0 15px 50px #0008;padding:28px}
+h1{margin:0 0 6px;font-size:clamp(28px,5vw,48px);letter-spacing:2px}
+.sub{color:#76ddff;margin-bottom:24px}
+.progress{height:9px;background:#123040;border-radius:20px;overflow:hidden;margin:18px 0 26px}
+.bar{height:100%;width:0;background:#26d9ff;transition:.3s}
+.q{font-size:clamp(20px,3vw,28px);line-height:1.35;margin-bottom:20px}
+.option{display:block;width:100%;text-align:left;margin:12px 0;padding:16px 18px;border-radius:14px;border:1px solid #2b7890;background:#071d2a;color:#fff;font-size:17px;cursor:pointer;transition:.2s}
+.option:hover{background:#0b3041;border-color:#45dfff}
+.option.correct{background:#073d2b;border-color:#48e69c}
+.option.wrong{background:#4a1820;border-color:#ff6677}
+button.next,.restart{margin-top:18px;padding:14px 24px;border:0;border-radius:14px;background:#19cfff;color:#00131d;font-weight:700;font-size:16px;cursor:pointer}
+.feedback{min-height:28px;margin-top:14px;color:#aeeeff}
+.score{text-align:center;font-size:24px;line-height:1.6}
+.badge{display:inline-block;margin:8px;padding:8px 14px;border-radius:30px;background:#083f52;color:#8eeaff}
+.small{color:#a8bac3;font-size:13px;margin-top:20px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="card">
+<div class="sub">SMALL CHOICES + BIG IMPACT</div>
+<h1>Responsible Use of Technology</h1>
+<div id="quiz">
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div id="counter"></div>
+<div class="q" id="question"></div>
+<div id="options"></div>
+<div class="feedback" id="feedback"></div>
+<button class="next hidden" id="next">Next Question</button>
+</div>
+<div id="result" class="hidden"></div>
+<div class="small">Think • Verify • Stay Safe • Be Ethical</div>
+</div>
+</div>
+<script>
+const questions = [{"q": "Before sharing a post, what should you do first?", "options": ["Share it quickly", "Check whether the information is true", "Add more hashtags", "Forward it to everyone"], "answer": 1}, {"q": "Which action respects a creator's copyright?", "options": ["Copy their work without permission", "Remove their name", "Give credit and follow the creator's permission/licence", "Claim it as your own"], "answer": 2}, {"q": "What is a good way to protect your privacy online?", "options": ["Use the same password everywhere", "Share passwords with friends", "Review privacy settings and limit personal information", "Post your address publicly"], "answer": 2}, {"q": "What does a digital footprint describe?", "options": ["Only your shoe size", "The trail of information and activity you leave online", "Your internet speed", "Your computer's weight"], "answer": 1}, {"q": "A message says you won a prize and asks for your password. What is the safest response?", "options": ["Send the password", "Click every link", "Verify the source and avoid sharing the password", "Forward it to contacts"], "answer": 2}, {"q": "Why is human judgment important when using AI?", "options": ["AI can never make mistakes", "People should review outputs and consider context and consequences", "AI automatically knows your values", "Human review is unnecessary"], "answer": 1}, {"q": "Which is an example of responsible AI use?", "options": ["Use AI without checking its output", "Hide all AI assistance", "Protect privacy, check for bias, and review results", "Let AI make every important decision alone"], "answer": 2}, {"q": "Which statement about online information is safest?", "options": ["Everything online is true", "Popular posts are always accurate", "Check reliable sources before believing or sharing claims", "Pictures can never be misleading"], "answer": 2}, {"q": "What should you consider before posting something about another person?", "options": ["Only whether it is funny", "Whether you have permission and whether sharing it could harm them", "How many likes it might get", "Whether it uses a bright colour"], "answer": 1}, {"q": "Which four questions match the poster's 'Before you post' checklist?", "options": ["Is it mine? Is it true? Is it safe? Is it ethical?", "Is it popular? Is it funny? Is it fast? Is it colourful?", "Is it expensive? Is it new? Is it famous? Is it long?", "Is it private? Is it viral? Is it trending? Is it short?"], "answer": 0}];
+let i=0, score=0, answered=false;
+const $=id=>document.getElementById(id);
+function render(){
+  answered=false;
+  $("feedback").textContent="";
+  $("next").classList.add("hidden");
+  const x=questions[i];
+  $("counter").textContent=`Question ${i+1} of ${questions.length}`;
+  $("question").textContent=x.q;
+  $("bar").style.width=`${(i/questions.length)*100}%`;
+  $("options").innerHTML="";
+  x.options.forEach((o,n)=>{
+    const b=document.createElement("button");
+    b.className="option"; b.textContent=o;
+    b.onclick=()=>choose(n,b);
+    $("options").appendChild(b);
+  });
+}
+function choose(n,btn){
+  if(answered)return;
+  answered=true;
+  const x=questions[i];
+  document.querySelectorAll(".option").forEach((b,k)=>{
+    b.disabled=true;
+    if(k===x.answer)b.classList.add("correct");
+  });
+  if(n===x.answer){score++;$("feedback").textContent="Great! That is the responsible choice."}
+  else {btn.classList.add("wrong");$("feedback").textContent="Not quite. Think about the poster's message: be smart, safe and ethical."}
+  $("next").textContent=i===questions.length-1?"See My Score":"Next Question";
+  $("next").classList.remove("hidden");
+}
+$("next").onclick=()=>{
+  if(i<questions.length-1){i++;render()}
+  else finish();
+};
+function finish(){
+  $("quiz").classList.add("hidden");
+  const pct=Math.round(score/questions.length*100);
+  let msg=pct>=80?"Excellent digital awareness!":pct>=60?"Good work — keep verifying and thinking critically.":"Keep learning — pause, verify, protect privacy, and use technology responsibly.";
+  $("result").classList.remove("hidden");
+  $("result").innerHTML=`<div class="score"><h2>Quiz Complete</h2><div class="badge">${score} / ${questions.length} correct</div><p>${pct}%</p><p>${msg}</p><button class="restart" onclick="location.reload()">Play Again</button></div>`;
+  $("bar").style.width="100%";
+}
+render();
+</script>
+</body>
+</html>
