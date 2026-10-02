@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Responsible Use of Technology — Digital Awareness Quiz</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(145deg,#03121d,#001b2b 55%,#03110e);color:#fff;min-height:100vh}
+.wrap{max-width:900px;margin:auto;padding:24px}
+.card{background:rgba(3,15,25,.88);border:1px solid #19cfff55;border-radius:24px;box-shadow:0 15px 50px #0008;padding:28px}
+h1{margin:0 0 6px;font-size:clamp(28px,5vw,48px);letter-spacing:2px}
+.sub{color:#76ddff;margin-bottom:24px}
+.progress{height:9px;background:#123040;border-radius:20px;overflow:hidden;margin:18px 0 26px}
+.bar{height:100%;width:0;background:#26d9ff;transition:.3s}
+.q{font-size:clamp(20px,3vw,28px);line-height:1.35;margin-bottom:20px}
+.option{display:block;width:100%;text-align:left;margin:12px 0;padding:16px 18px;border-radius:14px;border:1px solid #2b7890;background:#071d2a;color:#fff;font-size:17px;cursor:pointer;transition:.2s}
+.option:hover{background:#0b3041;border-color:#45dfff}
+.option.correct{background:#073d2b;border-color:#48e69c}
+.option.wrong{background:#4a1820;border-color:#ff6677}
+button.next,.restart{margin-top:18px;padding:14px 24px;border:0;border-radius:14px;background:#19cfff;color:#00131d;font-weight:700;font-size:16px;cursor:pointer}
+.feedback{min-height:28px;margin-top:14px;color:#aeeeff}
+.score{text-align:center;font-size:24px;line-height:1.6}
+.badge{display:inline-block;margin:8px;padding:8px 14px;border-radius:30px;background:#083f52;color:#8eeaff}
+.small{color:#a8bac3;font-size:13px;margin-top:20px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="card">
+<div class="sub">SMALL CHOICES + BIG IMPACT</div>
+<h1>Responsible Use of Technology</h1>
+<div id="quiz">
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div id="counter"></div>
+<div class="q" id="question"></div>
+<div id="options"></div>
+<div class="feedback" id="feedback"></div>
+<button class="next hidden" id="next">Next Question</button>
+</div>
+<div id="result" class="hidden"></div>
+<div class="small">Think • Verify • Stay Safe • Be Ethical</div>
+</div>
+</div>
+<script>
+const questionBank = [{"q": "Before sharing a post, what should you do first?", "options": ["Share it quickly", "Check whether the information is true", "Add more hashtags", "Forward it to everyone"], "answer": 1}, {"q": "Which action respects a creator's copyright?", "options": ["Copy their work without permission", "Remove their name", "Give credit and follow the creator's permission or licence", "Claim it as your own"], "answer": 2}, {"q": "What is a good way to protect your privacy online?", "options": ["Use the same password everywhere", "Share passwords with friends", "Review privacy settings and limit personal information", "Post your address publicly"], "answer": 2}, {"q": "What does a digital footprint describe?", "options": ["Only your shoe size", "The trail of information and activity you leave online", "Your internet speed", "Your computer's weight"], "answer": 1}, {"q": "A message says you won a prize and asks for your password. What is the safest response?", "options": ["Send the password", "Click every link", "Verify the source and avoid sharing the password", "Forward it to contacts"], "answer": 2}, {"q": "Why is human judgment important when using AI?", "options": ["AI can never make mistakes", "People should review outputs and consider context and consequences", "AI automatically knows your values", "Human review is unnecessary"], "answer": 1}, {"q": "Which is an example of responsible AI use?", "options": ["Use AI without checking its output", "Hide all AI assistance", "Protect privacy, check for bias, and review results", "Let AI make every important decision alone"], "answer": 2}, {"q": "Which statement about online information is safest?", "options": ["Everything online is true", "Popular posts are always accurate", "Check reliable sources before believing or sharing claims", "Pictures can never be misleading"], "answer": 2}, {"q": "What should you consider before posting something about another person?", "options": ["Only whether it is funny", "Whether you have permission and whether sharing it could harm them", "How many likes it might get", "Whether it uses a bright colour"], "answer": 1}, {"q": "Which four questions match the poster's 'Before you post' checklist?", "options": ["Is it mine? Is it true? Is it safe? Is it ethical?", "Is it popular? Is it funny? Is it fast? Is it colourful?", "Is it expensive? Is it new? Is it famous? Is it long?", "Is it private? Is it viral? Is it trending? Is it short?"], "answer": 0}, {"q": "What makes a password stronger?", "options": ["Using your name and birthday", "Using a long, unique passphrase", "Using '123456'", "Using the same password everywhere"], "answer": 1}, {"q": "What should you do if an app asks for access that seems unnecessary?", "options": ["Allow everything", "Review the permission and deny access that is not needed", "Give the app your password", "Ignore all privacy settings"], "answer": 1}, {"q": "Which is a warning sign of a phishing message?", "options": ["A trusted contact you expected", "Urgent pressure to click a link or reveal sensitive information", "A normal school announcement", "A message with no request"], "answer": 1}, {"q": "Why should you update your apps and operating system?", "options": ["Only to change the wallpaper", "Updates can fix security weaknesses and bugs", "Updates make passwords unnecessary", "It makes every website trustworthy"], "answer": 1}, {"q": "What is the safest response to a suspicious link?", "options": ["Click it to see what happens", "Open it on every device", "Avoid it and verify the sender or website through a trusted route", "Forward it to friends"], "answer": 2}, {"q": "What should you do before using an image from the internet in your project?", "options": ["Assume every image is free to use", "Check its copyright or licence and follow the conditions", "Remove the creator's name", "Claim the image as your own"], "answer": 1}, {"q": "Why can a digital footprint matter in the future?", "options": ["Online posts and activity can remain accessible and affect how others see you", "It disappears immediately", "Only passwords create a footprint", "It affects internet speed"], "answer": 0}, {"q": "What is a responsible way to use AI for schoolwork?", "options": ["Submit AI output without checking it", "Use AI as a tool, verify the information, and follow your school's rules", "Let AI do every part of the assignment secretly", "Assume AI is always correct"], "answer": 1}, {"q": "What does 'misinformation' generally mean?", "options": ["Information that is always secret", "False or inaccurate information, which may be shared without an intention to deceive", "A secure password", "A copyright licence"], "answer": 1}, {"q": "If two reliable sources disagree, what is a sensible next step?", "options": ["Choose the one with the most likes", "Check the evidence, source quality, date, and context", "Share both without reading them", "Assume the newest post is always correct"], "answer": 1}, {"q": "What is a good reason to use two-factor authentication?", "options": ["It adds another verification step to help protect an account", "It makes passwords public", "It removes all privacy risks", "It lets anyone access the account"], "answer": 0}, {"q": "What should you do if you accidentally share private information online?", "options": ["Ignore it forever", "Remove it where possible, change exposed credentials if needed, and tell a trusted adult or service when appropriate", "Share even more information", "Post your password"], "answer": 1}, {"q": "Which action supports healthy digital habits?", "options": ["Stay online continuously", "Take breaks and balance screen time with other activities", "Never sleep", "Check notifications every minute"], "answer": 1}, {"q": "Why is it useful to check the date of an online article?", "options": ["Older information may no longer reflect current facts or circumstances", "Dates make articles automatically true", "Old articles are always better", "The date controls your password"], "answer": 0}, {"q": "What should you do when an AI answer sounds confident but provides no evidence?", "options": ["Trust it because it sounds confident", "Verify important claims using reliable sources", "Share it immediately", "Assume it cannot be wrong"], "answer": 1}];
+const QUESTIONS_PER_GAME = 10;
+let questions = [];
+let i = 0, score = 0, answered = false;
+
+const $ = id => document.getElementById(id);
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let j = a.length - 1; j > 0; j--) {
+    const k = Math.floor(Math.random() * (j + 1));
+    [a[j], a[k]] = [a[k], a[j]];
+  }
+  return a;
+}
+
+function startGame() {
+  // Pick a fresh random set every time Play Again is pressed.
+  questions = shuffle(questionBank).slice(0, QUESTIONS_PER_GAME).map(q => {
+    const shuffledOptions = shuffle(q.options.map((text, index) => ({
+      text, correct: index === q.answer
+    })));
+    return {
+      q: q.q,
+      options: shuffledOptions.map(x => x.text),
+      answer: shuffledOptions.findIndex(x => x.correct)
+    };
+  });
+  i = 0;
+  score = 0;
+  answered = false;
+  $("quiz").classList.remove("hidden");
+  $("result").classList.add("hidden");
+  render();
+}
+
+function render() {
+  answered = false;
+  $("feedback").textContent = "";
+  $("next").classList.add("hidden");
+  const x = questions[i];
+  $("counter").textContent = `Question ${i + 1} of ${questions.length}`;
+  $("question").textContent = x.q;
+  $("bar").style.width = `${(i / questions.length) * 100}%`;
+  $("options").innerHTML = "";
+
+  x.options.forEach((o, n) => {
+    const b = document.createElement("button");
+    b.className = "option";
+    b.textContent = o;
+    b.onclick = () => choose(n, b);
+    $("options").appendChild(b);
+  });
+}
+
+function choose(n, btn) {
+  if (answered) return;
+  answered = true;
+  const x = questions[i];
+
+  document.querySelectorAll(".option").forEach((b, k) => {
+    b.disabled = true;
+    if (k === x.answer) b.classList.add("correct");
+  });
+
+  if (n === x.answer) {
+    score++;
+    $("feedback").textContent = "Great! That is the responsible choice.";
+  } else {
+    btn.classList.add("wrong");
+    $("feedback").textContent = "Not quite. Think about the poster's message: be smart, safe and ethical.";
+  }
+
+  $("next").textContent = i === questions.length - 1 ? "See My Score" : "Next Question";
+  $("next").classList.remove("hidden");
+}
+
+$("next").onclick = () => {
+  if (i < questions.length - 1) {
+    i++;
+    render();
+  } else {
+    finish();
+  }
+};
+
+function finish() {
+  $("quiz").classList.add("hidden");
+  const pct = Math.round(score / questions.length * 100);
+  let msg = pct >= 80
+    ? "Excellent digital awareness!"
+    : pct >= 60
+      ? "Good work — keep verifying and thinking critically."
+      : "Keep learning — pause, verify, protect privacy, and use technology responsibly.";
+
+  $("result").classList.remove("hidden");
+  $("result").innerHTML = `<div class="score">
+    <h2>Quiz Complete</h2>
+    <div class="badge">${score} / ${questions.length} correct</div>
+    <p>${pct}%</p>
+    <p>${msg}</p>
+    <p class="small">Press Play Again for a fresh random set of questions.</p>
+    <button class="restart" onclick="startGame()">Play Again</button>
+  </div>`;
+  $("bar").style.width = "100%";
+}
+
+startGame();
+</script>
+</body>
+</html>
